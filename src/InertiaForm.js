@@ -153,12 +153,20 @@ class InertiaForm {
                 options.onSuccess(page)
             }
         }
+        
+        const onFinish = () => {
+            this.processing = false;
 
-        if (requestType === 'delete') {
-            return this.__inertia[requestType](url, { ... options, onSuccess })
+            if (options.onFinish) {
+                options.onFinish()
+            }
         }
 
-        return this.__inertia[requestType](url, this.hasFiles() ? objectToFormData(this.data()) : this.data(), { ... options, onSuccess })
+        if (requestType === 'delete') {
+            return this.__inertia[requestType](url, { ... options, onSuccess, onFinish })
+        }
+
+        return this.__inertia[requestType](url, this.hasFiles() ? objectToFormData(this.data()) : this.data(), { ... options, onSuccess, onFinish })
     }
 
     hasFiles() {
